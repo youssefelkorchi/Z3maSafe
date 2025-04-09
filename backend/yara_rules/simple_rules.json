@@ -1,0 +1,55 @@
+[
+    {
+        "name": "Suspicious_Strings",
+        "description": "Detects suspicious strings in executables",
+        "severity": "medium",
+        "patterns": [
+            "cmd\\.exe",
+            "powershell",
+            "rundll32",
+            "socket",
+            "connect",
+            "wget",
+            "curl",
+            "inject",
+            "shellcode",
+            "keylog",
+            "screenshot",
+            "base64",
+            "encrypt",
+            "decrypt"
+        ]
+    },
+    {
+        "name": "Suspicious_APIs",
+        "description": "Detects suspicious API imports",
+        "severity": "high",
+        "patterns": [
+            "VirtualAlloc",
+            "VirtualAllocEx",
+            "CreateRemoteThread",
+            "WriteProcessMemory",
+            "ReadProcessMemory",
+            "SetWindowsHookEx",
+            "RegCreateKey",
+            "RegSetValue",
+            "GetAsyncKeyState",
+            "GetKeyState"
+        ]
+    },
+    {
+        "name": "Known_Packers",
+        "description": "Detects known packer signatures",
+        "severity": "medium",
+        "patterns": [
+            "UPX[0-9]?",
+            "ASPack",
+            "Themida",
+            "VMProtect",
+            "Enigma",
+            "PECompact",
+            "MPRESS",
+            "FSG"
+        ]
+    }
+]
