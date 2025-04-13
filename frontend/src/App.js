@@ -1,17 +1,22 @@
+// Update the imports at the top of the file
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import styled from 'styled-components';
 import { FaShieldAlt, FaUpload, FaExclamationTriangle, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 
 // API endpoint
 const API_URL = 'http://localhost:8000';
 
 function App() {
+  // State management remains the same
   const [scanResult, setScanResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // onDrop function remains the same
   const onDrop = async (acceptedFiles) => {
     // Reset states
     setError(null);
@@ -47,6 +52,7 @@ function App() {
     }
   };
 
+  // Dropzone and utility functions remain the same
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
     onDrop,
     accept: {
@@ -78,6 +84,8 @@ function App() {
 
   return (
     <AppContainer>
+      <Navigation />
+      
       <Header>
         <Logo>
           <FaShieldAlt size={32} />
@@ -178,9 +186,7 @@ function App() {
         )}
       </MainContent>
 
-      <Footer>
-        <p>Z3maSafe &copy; {new Date().getFullYear()} - Files are analyzed locally and never uploaded to external servers</p>
-      </Footer>
+      <Footer />
     </AppContainer>
   );
 }
@@ -380,7 +386,7 @@ function formatFileSize(bytes) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-// Styled Components
+// Updated Styled Components with responsive design
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -388,33 +394,49 @@ const AppContainer = styled.div`
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
   background-color: #f5f7fa;
+  transition: all 0.3s ease;
 `;
 
 const Header = styled.header`
-  background-color: #fff;
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #6c63ff 0%, #4834d4 100%);
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 const Logo = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #6c63ff;
+  gap: 0.8rem;
+  color: white;
   
   h1 {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
   }
 `;
 
 const Subtitle = styled.p`
   margin: 0.5rem 0 0;
-  color: #666;
-  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  font-weight: 300;
+  
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const MainContent = styled.main`
@@ -423,20 +445,31 @@ const MainContent = styled.main`
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+  }
 `;
 
 const DropzoneContainer = styled.div`
   border: 2px dashed ${props => props.isError ? '#F44336' : props.isDragActive ? '#6c63ff' : '#ccc'};
-  border-radius: 8px;
-  padding: 2rem;
+  border-radius: 12px;
+  padding: 3rem 2rem;
   text-align: center;
   cursor: pointer;
   background-color: ${props => props.isDragActive ? 'rgba(108, 99, 255, 0.05)' : '#fff'};
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   
   &:hover {
     border-color: #6c63ff;
     background-color: rgba(108, 99, 255, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(108, 99, 255, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
   }
 `;
 
@@ -444,15 +477,25 @@ const DropzoneContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.2rem;
   
   p {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
   }
   
   small {
     color: #666;
+    font-size: 0.9rem;
+    
+    @media (max-width: 480px) {
+      font-size: 0.8rem;
+    }
   }
 `;
 
@@ -461,85 +504,141 @@ const LoadingContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
-  gap: 1rem;
+  gap: 1.5rem;
   
   p {
     margin: 0;
     color: #666;
+    font-size: 1.1rem;
+    
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
   }
 `;
 
 const Spinner = styled.div`
-  border: 4px solid rgba(0, 0, 0, 0.1);
+  border: 4px solid rgba(108, 99, 255, 0.1);
   border-radius: 50%;
   border-top: 4px solid #6c63ff;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   animation: spin 1s linear infinite;
   
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+  
+  @media (max-width: 480px) {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const ErrorContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  padding: 1rem;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  padding: 1.2rem;
   background-color: #FFEBEE;
-  border-radius: 4px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(244, 67, 54, 0.1);
   
   p {
     margin: 0;
     color: #D32F2F;
+    font-weight: 500;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 1rem;
+    font-size: 0.9rem;
   }
 `;
 
 const ResultsContainer = styled.div`
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const ResultHeader = styled.div`
-  padding: 1.5rem;
+  padding: 1.8rem 2rem;
   border-bottom: 1px solid #eee;
+  background-color: #f9f9f9;
   
   h2 {
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.8rem;
     color: #333;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    
+    h2 {
+      font-size: 1.5rem;
+    }
   }
 `;
 
 const FileInfo = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
   
   p {
     margin: 0;
-    color: #666;
+    color: #555;
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 1rem;
+    flex-direction: column;
+    
+    p {
+      font-size: 0.9rem;
+    }
   }
 `;
 
 const SusLevelContainer = styled.div`
-  padding: 1.5rem;
+  padding: 1.8rem 2rem;
   border-bottom: 1px solid #eee;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
 `;
 
 const SusLevelHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   
   h3 {
     margin: 0;
     color: #333;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+  
+  @media (max-width: 480px) {
+    h3 {
+      font-size: 1.2rem;
+    }
   }
 `;
 
@@ -548,33 +647,57 @@ const SusLevelBar = styled.div`
   background-color: #eee;
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
 const SusLevelFill = styled.div`
   height: 100%;
-  transition: width 0.5s ease;
+  transition: width 0.8s ease-out;
 `;
 
 const SusLevelValue = styled.div`
   text-align: right;
-  margin-top: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: bold;
+  margin-top: 0.8rem;
+  font-size: 1.8rem;
+  font-weight: 700;
   color: ${props => props.color};
+  
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const ScoresContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  padding: 1.5rem;
+  gap: 1.5rem;
+  padding: 1.8rem 2rem;
   border-bottom: 1px solid #eee;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.2rem;
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
 `;
 
 const ScoreItem = styled.div`
   h4 {
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.8rem;
     color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  @media (max-width: 480px) {
+    h4 {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -583,19 +706,25 @@ const ScoreBar = styled.div`
   background-color: #eee;
   border-radius: 4px;
   overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 `;
 
 const ScoreFill = styled.div`
   height: 100%;
   width: ${props => props.width}%;
   background-color: ${props => props.color};
-  transition: width 0.5s ease;
+  transition: width 0.6s ease-out;
 `;
 
 const ScoreValue = styled.div`
   text-align: right;
-  margin-top: 0.25rem;
-  font-weight: bold;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const DetailsContainer = styled.div`
@@ -606,6 +735,7 @@ const TabsHeader = styled.div`
   display: flex;
   overflow-x: auto;
   border-bottom: 1px solid #eee;
+  background-color: #f9f9f9;
   
   &::-webkit-scrollbar {
     height: 4px;
@@ -615,25 +745,49 @@ const TabsHeader = styled.div`
     background-color: #ccc;
     border-radius: 2px;
   }
+  
+  @media (max-width: 768px) {
+    padding: 0 0.5rem;
+  }
 `;
 
 const TabButton = styled.button`
-  padding: 1rem 1.5rem;
+  padding: 1.2rem 1.5rem;
   background: none;
   border: none;
-  border-bottom: 2px solid ${props => props.active ? '#6c63ff' : 'transparent'};
+  border-bottom: 3px solid ${props => props.active ? '#6c63ff' : 'transparent'};
   color: ${props => props.active ? '#6c63ff' : '#666'};
   font-weight: ${props => props.active ? 'bold' : 'normal'};
   cursor: pointer;
   white-space: nowrap;
+  transition: all 0.2s ease;
   
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${props => props.active ? 'rgba(108, 99, 255, 0.05)' : '#f5f5f5'};
+    color: ${props => props.active ? '#6c63ff' : '#333'};
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.8rem 1rem;
+    font-size: 0.8rem;
   }
 `;
 
 const TabContent = styled.div`
-  padding: 1.5rem;
+  padding: 1.8rem 2rem;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 1.2rem 1rem;
+  }
 `;
 
 const Table = styled.table`
@@ -641,84 +795,145 @@ const Table = styled.table`
   border-collapse: collapse;
   
   th, td {
-    padding: 0.75rem;
+    padding: 1rem;
     text-align: left;
     border-bottom: 1px solid #eee;
   }
   
   th {
-    font-weight: bold;
+    font-weight: 600;
     color: #333;
+    background-color: #f9f9f9;
   }
   
   tr:last-child td {
     border-bottom: none;
   }
+  
+  tr:hover td {
+    background-color: #f9f9f9;
+  }
+  
+  @media (max-width: 768px) {
+    th, td {
+      padding: 0.8rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    display: block;
+    overflow-x: auto;
+    
+    th, td {
+      padding: 0.7rem;
+      font-size: 0.8rem;
+    }
+  }
 `;
 
 const ScoreChip = styled.span`
   display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
   font-size: 0.85rem;
-  font-weight: bold;
+  font-weight: 600;
   color: white;
   background-color: ${props => {
     if (props.score <= 30) return '#4CAF50';
     if (props.score <= 70) return '#FFC107';
     return '#F44336';
   }};
+  box-shadow: 0 2px 4px ${props => {
+    if (props.score <= 30) return 'rgba(76, 175, 80, 0.2)';
+    if (props.score <= 70) return 'rgba(255, 193, 7, 0.2)';
+    return 'rgba(244, 67, 54, 0.2)';
+  }};
+  
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
 `;
 
 const SeverityChip = styled.span`
   display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
   font-size: 0.85rem;
-  font-weight: bold;
+  font-weight: 600;
   color: white;
   background-color: ${props => {
     if (props.severity === 'low') return '#4CAF50';
     if (props.severity === 'medium') return '#FFC107';
     return '#F44336';
   }};
+  box-shadow: 0 2px 4px ${props => {
+    if (props.severity === 'low') return 'rgba(76, 175, 80, 0.2)';
+    if (props.severity === 'medium') return 'rgba(255, 193, 7, 0.2)';
+    return 'rgba(244, 67, 54, 0.2)';
+  }};
+  
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
 `;
 
 const EmptyState = styled.div`
   text-align: center;
-  padding: 2rem;
+  padding: 3rem 2rem;
   color: #666;
+  font-size: 1.1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  
+  @media (max-width: 480px) {
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+  }
 `;
 
 const HashesContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
+  
+  @media (max-width: 480px) {
+    gap: 1.2rem;
+  }
 `;
 
 const HashItem = styled.div`
   h4 {
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.8rem;
     color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  @media (max-width: 480px) {
+    h4 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
   }
 `;
 
 const HashValue = styled.code`
   display: block;
-  padding: 0.75rem;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-  font-family: monospace;
-  word-break: break-all;
-`;
-
-const Footer = styled.footer`
   padding: 1rem;
-  text-align: center;
-  color: #666;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  word-break: break-all;
   font-size: 0.9rem;
-  background-color: #fff;
-  border-top: 1px solid #eee;
+  border: 1px solid #eee;
+  
+  @media (max-width: 480px) {
+    padding: 0.8rem;
+    font-size: 0.8rem;
+  }
 `;
 
 export default App;
