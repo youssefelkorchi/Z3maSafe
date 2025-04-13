@@ -1,16 +1,20 @@
 // Update the imports at the top of the file
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import styled from 'styled-components';
 import { FaShieldAlt, FaUpload, FaExclamationTriangle, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
+import About from './pages/About';
+import Documentation from './pages/Documentation';
 
 // API endpoint
 const API_URL = 'http://localhost:8000';
 
-function App() {
+// Main scanner component that will be the homepage
+function Scanner() {
   // State management remains the same
   const [scanResult, setScanResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -83,9 +87,7 @@ function App() {
   };
 
   return (
-    <AppContainer>
-      <Navigation />
-      
+    <>
       <Header>
         <Logo>
           <FaShieldAlt size={32} />
@@ -185,9 +187,24 @@ function App() {
           </ResultsContainer>
         )}
       </MainContent>
+    </>
+  );
+}
 
-      <Footer />
-    </AppContainer>
+// Main App component with routing
+function App() {
+  return (
+    <Router>
+      <AppContainer>
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<Scanner />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/docs" element={<Documentation />} />
+        </Routes>
+        <Footer />
+      </AppContainer>
+    </Router>
   );
 }
 
@@ -386,7 +403,7 @@ function formatFileSize(bytes) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-// Updated Styled Components with responsive design
+// Styled Components
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;

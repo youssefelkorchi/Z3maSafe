@@ -1,18 +1,32 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Link, useLocation } from 'react-router-dom';
 import { FaShieldAlt, FaBars, FaTimes, FaGithub } from 'react-icons/fa';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  // Check if the path matches the current location
+  const isActive = (path) => {
+    if (path === '/') {
+      return location.pathname === path;
+    }
+    return location.pathname.startsWith(path);
+  };
+
   return (
     <NavContainer>
       <NavContent>
-        <LogoContainer>
+        <LogoContainer as={Link} to="/">
           <FaShieldAlt size={28} color="#fff" />
           <LogoText>Z3maSafe</LogoText>
         </LogoContainer>
@@ -22,23 +36,24 @@ const Navigation = () => {
         </MenuButton>
 
         <NavLinks isOpen={isMenuOpen}>
-          <NavLink href="#" active>Home</NavLink>
-          <NavLink href="#about">About</NavLink>
-          <NavLink href="#docs">Documentation</NavLink>
-          <NavLink 
+          <NavLink to="/" active={isActive('/')} onClick={closeMenu}>Home</NavLink>
+          <NavLink to="/about" active={isActive('/about')} onClick={closeMenu}>About</NavLink>
+          <NavLink to="/docs" active={isActive('/docs')} onClick={closeMenu}>Documentation</NavLink>
+          <ExternalLink 
             href="https://github.com/yourusername/z3masafe" 
             target="_blank"
             rel="noopener noreferrer"
           >
             <FaGithub style={{ marginRight: '8px' }} />
             GitHub
-          </NavLink>
+          </ExternalLink>
         </NavLinks>
       </NavContent>
     </NavContainer>
   );
 };
 
+// Styled components remain mostly the same
 const NavContainer = styled.nav`
   background: linear-gradient(135deg, #6c63ff 0%, #4834d4 100%);
   color: white;
@@ -65,6 +80,8 @@ const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  text-decoration: none;
+  color: white;
 `;
 
 const LogoText = styled.h1`
@@ -111,7 +128,8 @@ const NavLinks = styled.div`
   }
 `;
 
-const NavLink = styled.a`
+// Updated to use Link component from react-router-dom
+const NavLink = styled(Link)`
   color: white;
   text-decoration: none;
   font-weight: ${({ active }) => active ? '600' : '400'};
@@ -126,6 +144,32 @@ const NavLink = styled.a`
     bottom: 0;
     left: 0;
     width: ${({ active }) => active ? '100%' : '0'};
+    height: 2px;
+    background-color: white;
+    transition: width 0.3s ease;
+  }
+  
+  &:hover:after {
+    width: 100%;
+  }
+`;
+
+// For external links that should use regular anchor tags
+const ExternalLink = styled.a`
+  color: white;
+  text-decoration: none;
+  font-weight: 400;
+  padding: 0.5rem 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
     height: 2px;
     background-color: white;
     transition: width 0.3s ease;
