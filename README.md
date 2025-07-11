@@ -79,7 +79,7 @@ z3masafe/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/z3masafe.git
+git clone https://github.com/youssefelkorchi/z3masafe.git
 cd z3masafe
 
 # Set up Python virtual environment (optional but recommended)
